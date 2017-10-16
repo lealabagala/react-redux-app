@@ -22,11 +22,11 @@ describe('(Redux Module) Counter', () => {
     it('Should return the previous state if an action was not matched.', () => {
       let state = counterReducer(undefined, {})
       expect(state).to.equal(0)
-      state = counterReducer(state, { type: '@@@@@@@' })
+      state = counterReducer(state, {type: '@@@@@@@'})
       expect(state).to.equal(0)
       state = counterReducer(state, increment(5))
       expect(state).to.equal(5)
-      state = counterReducer(state, { type: '@@@@@@@' })
+      state = counterReducer(state, {type: '@@@@@@@'})
       expect(state).to.equal(5)
     })
   })
@@ -56,12 +56,12 @@ describe('(Redux Module) Counter', () => {
 
     beforeEach(() => {
       _globalState = {
-        counter : counterReducer(undefined, {})
+        counter: counterReducer(undefined, {})
       }
       _dispatchSpy = sinon.spy((action) => {
         _globalState = {
           ..._globalState,
-          counter : counterReducer(_globalState.counter, action)
+          counter: counterReducer(_globalState.counter, action)
         }
       })
       _getStateSpy = sinon.spy(() => {
@@ -84,8 +84,8 @@ describe('(Redux Module) Counter', () => {
     it('Should call dispatch and getState exactly once.', () => {
       return doubleAsync()(_dispatchSpy, _getStateSpy)
         .then(() => {
-          _dispatchSpy.should.have.been.calledOnce()
-          _getStateSpy.should.have.been.calledOnce()
+          _dispatchSpy.should.have.been.calledOnce
+          _getStateSpy.should.have.been.calledOnce
         })
     })
 
@@ -94,14 +94,14 @@ describe('(Redux Module) Counter', () => {
 
       return doubleAsync()(_dispatchSpy, _getStateSpy)
         .then(() => {
-          _dispatchSpy.should.have.been.calledOnce()
-          _getStateSpy.should.have.been.calledOnce()
+          _dispatchSpy.should.have.been.calledOnce
+          _getStateSpy.should.have.been.calledOnce
           expect(_globalState.counter).to.equal(4)
           return doubleAsync()(_dispatchSpy, _getStateSpy)
         })
         .then(() => {
-          _dispatchSpy.should.have.been.calledTwice()
-          _getStateSpy.should.have.been.calledTwice()
+          _dispatchSpy.should.have.been.calledTwice
+          _getStateSpy.should.have.been.calledTwice
           expect(_globalState.counter).to.equal(8)
         })
     })

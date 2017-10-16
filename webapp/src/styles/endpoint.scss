@@ -1,0 +1,49 @@
+.home-title {
+  color: orange;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.navbar-home {
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.container-login {
+  .panel {
+    padding: 20px;
+    border: 1px solid lightgray;
+  }
+  .btn {
+    width: 100%;
+  }
+  .col-md-6 {
+    padding: 0 60px;
+  }
+}
+
+.container-songs {
+  .row-song-labels {
+    padding: 15px 15px 0;
+  }
+  .row-songs {
+    &:hover {
+      background: lightblue;
+    }
+    padding: 15px;
+    border: 1px solid lightgray;
+    border-bottom: 0;
+    &.first {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom: 0;
+    }
+    &.last {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border-bottom: 1px solid lightgray;
+    }
+  }
+}

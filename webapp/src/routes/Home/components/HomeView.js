@@ -1,12 +1,25 @@
 import React from 'react'
-import DuckImage from '../assets/Duck.jpg'
-import './HomeView.scss'
+import classes from './HomeView.scss'
+import { Button } from 'react-bootstrap'
 
-export const HomeView = () => (
-  <div>
-    <h4>Welcome!</h4>
-    <img alt='This is a duck, because Redux!' className='duck' src={DuckImage} />
-  </div>
-)
+class HomeView extends React.Component {
+  componentWillMount () {
+    this.props.connectToAPI()
+    this.props.search('Pine')
+  }
+
+  render () {
+    let { app } = this.props
+
+    app = app.toJSON()
+    console.log(app)
+    return (
+      <div>
+        <h4 className="home-title">Welcome, Guest!</h4>
+        <h6>This is a sample React-Redux app with a login and logout function.</h6>
+      </div>
+    )
+  }
+}
 
 export default HomeView

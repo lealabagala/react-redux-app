@@ -1,43 +1,43 @@
-import { applyMiddleware, compose, createStore as createReduxStore } from 'redux'
+import { applyMiddleware, compose, createStore } from 'redux'
+import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
-import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'
-import { updateLocation } from './location'
 import { apiMiddleware } from 'redux-api-middleware'
+import { persistStore, autoRehydrate } from 'redux-persist'
+import handleTransitions from 'redux-history-transitions'
 
-const createStore = (initialState = {}) => {
+export default (initialState = {}, history) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, apiMiddleware]
+  const middleware = [thunk, apiMiddleware, routerMiddleware(history)]
 
   // ======================================================
   // Store Enhancers
   // ======================================================
-  const enhancers = []
-  let composeEnhancers = compose
-
-  if (__DEV__) {
-    if (typeof window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ === 'function') {
-      composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  const enhancers = [
+    handleTransitions(history),
+  ]
+  if (__DEBUG__) {
+    const devToolsExtension = window.devToolsExtension
+    if (typeof devToolsExtension === 'function') {
+      enhancers.push(devToolsExtension())
     }
   }
 
   // ======================================================
   // Store Instantiation and HMR Setup
   // ======================================================
-  const store = createReduxStore(
+  const store = createStore(
     makeRootReducer(),
     initialState,
-    composeEnhancers(
+    compose(
+      autoRehydrate(),
       applyMiddleware(...middleware),
       ...enhancers
     )
   )
   store.asyncReducers = {}
-
-  // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
-  store.unsubscribeHistory = browserHistory.listen(updateLocation(store))
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
@@ -45,8 +45,8 @@ const createStore = (initialState = {}) => {
       store.replaceReducer(reducers(store.asyncReducers))
     })
   }
+  
+  persistStore(store, { whitelist: ['auth'] })
 
   return store
 }
-
-export default createStore
