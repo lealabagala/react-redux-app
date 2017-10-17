@@ -1,5 +1,5 @@
 {
-  "name": "DuckApp",
+  "name": "UserProperties",
   "version": "3.0.0-alpha.2",
   "description": "A Sample React-Redux App",
   "main": "index.js",
@@ -72,9 +72,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davezuko/react-redux-starter-kit.git"
+    "url": "git+https://github.com/lealabagala/user-properties.git"
   },
-  "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
+  "author": "Lea Labagala",
   "license": "MIT",
   "dependencies": {
     "babel-cli": "^6.5.1",
