@@ -9,26 +9,24 @@
   padding-right: 20px;
   display: flex;
   justify-content: space-between;
-}
 
-.container-login {
-  .panel {
-    padding: 20px;
-    border: 1px solid lightgray;
-  }
-  .btn {
-    width: 100%;
-  }
-  .col-md-6 {
-    padding: 0 60px;
+  .navbar-access {
+    display: flex;
+    width: 30%;
+    .form-control, .btn-primary {
+      margin: 10px 5px;
+    }
   }
 }
 
-.container-songs {
-  .row-song-labels {
-    padding: 15px 15px 0;
+.container-results {
+  .panel-main {
+    padding: 20px 50px;
   }
-  .row-songs {
+  .row-labels {
+    padding: 0 15px;
+  }
+  .row-results {
     &:hover {
       background: lightblue;
     }
@@ -45,5 +43,9 @@
       border-bottom-right-radius: 5px;
       border-bottom: 1px solid lightgray;
     }
+  }
+  .collapse {
+    background: lightgray;
+    padding: 10px 20px 20px;
   }
 }

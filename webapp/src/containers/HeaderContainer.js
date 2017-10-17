@@ -5,13 +5,14 @@ import { connect } from 'react-redux'
     component - in this case, the counter:   */
 
 import Header from 'components/Header'
+import { search } from 'store/modules/app'
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-  
+  search, 
 }
 
 const mapStateToProps = (state) => ({

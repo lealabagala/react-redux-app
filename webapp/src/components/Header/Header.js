@@ -2,10 +2,10 @@ import React from 'react'
 import '../../styles/core.scss'
 import HomeHeader from './HomeHeader'
 
-export const Header = () => {
+export const Header = (props) => {
   return (
     <header>
-    <HomeHeader />
+    <HomeHeader {...props}/>
     </header>
   )
 }

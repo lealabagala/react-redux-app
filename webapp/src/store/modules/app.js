@@ -36,13 +36,15 @@ export function search (searchString) {
         properties {
           street,
           city,
-          state
+          state,
+          rent
         }
       },
       properties {
-         street,
+        street,
         city,
         state,
+        rent,
         user {
           id,
           firstName,
@@ -55,7 +57,16 @@ export function search (searchString) {
     [CALL_API]: {
       endpoint: `/api/graphql?query=${searchQuery}`,
       method: 'GET',
-      types: [ SEARCH, SEARCH_SUCCESS, SEARCH_FAIL ],
+      types: [ SEARCH, 
+        {
+          type: SEARCH_SUCCESS,
+          payload: (action, state, res) => res.json(),
+          meta: {
+            searchString,
+          },
+        }, 
+        SEARCH_FAIL 
+      ],
     },
   }
 }
@@ -108,7 +119,8 @@ ACTION_HANDLERS[SEARCH] = state => {
 ACTION_HANDLERS[SEARCH_SUCCESS] = (state, action) => {
   return state.merge({
     success: true,
-    result: action.payload,
+    searchResult: action.payload.data.search,
+    searchString: action.meta.searchString,
     error: null,
   })
 }
@@ -126,10 +138,11 @@ ACTION_HANDLERS[SEARCH_FAIL] = (state, action) => {
 const initialState = Immutable.fromJS({
   error: null,
   connection: null,
-  result: {
+  searchResult: {
     users: [],
     properties: []
-  }
+  },
+  searchString: '',
 })
 
 export default function appReducer(state = initialState, action) {

@@ -1,5 +1,5 @@
 // We only need to import the modules necessary for initial render
-import HomeRoute from './Home'
+import SearchRoute from './Search'
 
 export const createRoutes = (store) => ({
   onEnter: async (nextState, replace, cb) => {
@@ -15,7 +15,7 @@ export const createRoutes = (store) => ({
     }, 'core')
   },
   childRoutes: [
-    HomeRoute(store),
+    SearchRoute(store),
   ]
 })
 
