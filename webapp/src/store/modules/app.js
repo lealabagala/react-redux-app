@@ -13,7 +13,6 @@ export const CLEAR_SEARCH = 'api/CLEAR_SEARCH'
 const searchObject = {
   users: [],
   properties: [],
-  searchStrings: []
 }
 
 // ------------------------------------
@@ -21,10 +20,8 @@ const searchObject = {
 // ------------------------------------
 
 export function search (searchString, searchType='final') {
-  let re = new RegExp(`"`, 'g')
-
   let searchQuery = `{
-    search(searchString: "${searchString.replace(re, `\\\"`)}") {
+    search(searchString: "${searchString}") {
       users {
         id,
         firstName,
@@ -47,7 +44,6 @@ export function search (searchString, searchType='final') {
           lastName,
         }
       }
-      searchStrings
     }
   }`
 
@@ -61,6 +57,7 @@ export function search (searchString, searchType='final') {
           payload: (action, state, res) => res.json(),
           meta: {
             searchType,
+            searchString,
           },
         }, 
         SEARCH_FAIL 
@@ -98,11 +95,15 @@ ACTION_HANDLERS[SEARCH] = state => {
 
 ACTION_HANDLERS[SEARCH_SUCCESS] = (state, action) => {
   let obj = action.meta.searchType === 'final' ? 'searchResult' : 'preSearchResult'
-  return state.merge({
+  let params = {
     success: true,
     [obj]: action.payload.data.search,
     error: null,
-  })
+  }
+  if (action.meta.searchType === 'final') {
+    params.searchString = action.meta.searchString
+  }
+  return state.merge(params)
 }
 
 ACTION_HANDLERS[SEARCH_FAIL] = (state, action) => {
@@ -115,6 +116,7 @@ ACTION_HANDLERS[SEARCH_FAIL] = (state, action) => {
 ACTION_HANDLERS[CLEAR_SEARCH] = (state) => {
   return state.merge({
     searchResult: searchObject,
+    searchString: ''
   })
 }
 
@@ -127,6 +129,7 @@ const initialState = Immutable.fromJS({
   error: null,
   searchResult: searchObject,
   preSearchResult: searchObject,
+  searchString: ''
 })
 
 export default function appReducer(state = initialState, action) {

@@ -16,21 +16,21 @@ class Home extends React.Component {
   }
 
   render () {
-    let { searchResult } = this.props
-    let { users, properties, searchStrings } = searchResult.toJSON()
+    let { searchResult, searchString } = this.props
+    let { users, properties } = searchResult.toJSON()
     let showUsers = users.length !== 0
     let showProperties = properties.length !== 0
     
-    let Header = searchStrings.length === 0 ? 
+    let Header = searchString === '' && !showUsers && !showProperties ? 
       <div className="text-center margin-top-40">
         <h4 className="home-title">Welcome, Guest!</h4>
         <h6>This is a sample React-Redux app with a search function.</h6>
       </div> :
-      searchStrings[0] === '' ?
+      searchString === '' ?
         <center><h3>All Results</h3></center> :
         <center><h3>
           { !showUsers && !showProperties ? 'No ' : '' } 
-          Search Results for { searchStrings.map(str => `"${str}" `) }</h3></center>
+          Search Results for "{ searchString }"</h3></center>
 
     return (
       <div className="container container-results text-left">

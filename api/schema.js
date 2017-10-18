@@ -87,17 +87,9 @@ const MainQuery = new GraphQLObjectType({
       resolve(root, args) {
         let { searchString } = args
         let searchStrings = searchString.split(' ')  // split search string by space character
-        
-        let oneString = false
-        if (searchString.length !== 0 
-            && searchString.charAt(0) === `"` 
-            && searchString.charAt(searchString.length-1) === `"`) { // determine if string is closed by quotation marks
-          searchStrings = [ searchString.slice(1, searchString.length-1) ]
-          oneString = true
-        }
 
         if (searchStrings.length > 1) {
-          searchStrings = searchStrings.filter((str) => { return str !== '' })
+          searchStrings = searchStrings.filter((str) => { return str !== '' }) // filter empty strings
         }
         
         let userFields = ['firstName', 'lastName']        // search user's first and last name
@@ -107,51 +99,45 @@ const MainQuery = new GraphQLObjectType({
 
         // set conditions for searching string
         _.times(searchStrings.length, (i) => {
+          let params = []
           _.times(userFields.length, (j) => {
-            userConditions.push({
+            params.push({
               [userFields[j]]: {
                 [Op.iLike]: `%${searchStrings[i]}%`
               }
             })
           })
+          userConditions.push({
+            [Op.or]: params
+          })
+
+          params = []
           _.times(propertyFields.length, (j) => {
-            propertyConditions.push({
+            params.push({
               [propertyFields[j]]: {
                 [Op.iLike]: `%${searchStrings[i]}%`
               }
             })
           })
+          propertyConditions.push({
+            [Op.or]: params
+          })
         })
-
-        let userCriteria = !oneString ?
-        { 
-          where: {
-            [Op.or]: userConditions
-          } 
-        } :
-        {
-          where: Db.where(Db.fn('concat', Db.col('firstName'), Db.col('lastName')), {
-            [Op.iLike]: `%${searchStrings[0].split(' ').join('%')}%`
-          })
-        }
-
-        let propCriteria = !oneString ?
-        { 
-          where: {
-            [Op.or]: propertyConditions
-          } 
-        } :
-        {
-          where: Db.where(Db.fn('concat', Db.col('street'), Db.col('city'), Db.col('state')), {
-            [Op.iLike]: `%${searchStrings[0].split(' ').join('%')}%`
-          })
-        }
+        
       
         // Fetch users by search string
-        let usersPromise = Db.models.user.findAll(userCriteria)
+        let usersPromise = Db.models.user.findAll({ 
+          where: {
+            [Op.and]: userConditions
+          } 
+        })
 
         // Fetch properties by search string
-        let propsPromise = Db.models.property.findAll(propCriteria)
+        let propsPromise = Db.models.property.findAll({ 
+          where: {
+            [Op.and]: propertyConditions
+          } 
+        })
           
         // Return users and properties in one object
         return Promise.join(

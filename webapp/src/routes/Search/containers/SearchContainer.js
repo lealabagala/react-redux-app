@@ -10,6 +10,7 @@ const mapActionCreators = {
 
 const mapStateToProps = (state) => ({
   searchResult: state.app.get('searchResult'),
+  searchString: state.app.get('searchString'),
 })
 
 export default connect(mapStateToProps, mapActionCreators)(Search)

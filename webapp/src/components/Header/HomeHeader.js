@@ -69,7 +69,7 @@ class HomeHeader extends React.Component {
             { searchStrings.length !== 0 && showPreSearchResults && searchStrings[0] !== "" &&
               <Dropdown.Menu className="search-result">
                 { searchStrings.map((str) => (
-                  <MenuItem onClick={() => this.handleSelect(`"${str.value}"`)}>{str.value}</MenuItem>
+                  <MenuItem onClick={() => this.handleSelect(str.value)}>{str.value}</MenuItem>
                 )) }
               </Dropdown.Menu> }
           </div>
