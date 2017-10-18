@@ -95,6 +95,10 @@ const MainQuery = new GraphQLObjectType({
           searchStrings = [ searchString.slice(1, searchString.length-1) ]
           oneString = true
         }
+
+        if (searchStrings.length > 1) {
+          searchStrings = searchStrings.filter((str) => { return str !== '' })
+        }
         
         let userFields = ['firstName', 'lastName']        // search user's first and last name
         let propertyFields = ['street', 'city', 'state']  // search properties' street, city, and state

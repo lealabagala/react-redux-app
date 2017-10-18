@@ -49,3 +49,8 @@ Run App (Port `3000`)
 ```bash
 $ npm run dev
 ```
+
+## Usage
+
+Search a user or property details by typing on the search bar. 
+* Note: You may use quotation marks (`""`) to join search strings. (e.g. `"John Doe"`)
