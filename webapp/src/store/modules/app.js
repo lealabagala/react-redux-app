@@ -15,8 +15,10 @@ export const CLEAR_SEARCH = 'api/CLEAR_SEARCH'
 // ------------------------------------
 
 export function search (searchString) {
+  let re = new RegExp(`"`, 'g')
+
   let searchQuery = `{
-    search(searchString: "${searchString}") {
+    search(searchString: "${searchString.replace(re, `\\\"`)}") {
       users {
         id,
         firstName,
@@ -39,22 +41,14 @@ export function search (searchString) {
           lastName,
         }
       }
+      searchStrings
     }
   }`
   return {
     [CALL_API]: {
       endpoint: `/api/graphql?query=${searchQuery}`,
       method: 'GET',
-      types: [ SEARCH, 
-        {
-          type: SEARCH_SUCCESS,
-          payload: (action, state, res) => res.json(),
-          meta: {
-            searchString,
-          },
-        }, 
-        SEARCH_FAIL 
-      ],
+      types: [ SEARCH, SEARCH_SUCCESS, SEARCH_FAIL ],
     },
   }
 }
@@ -90,7 +84,6 @@ ACTION_HANDLERS[SEARCH_SUCCESS] = (state, action) => {
   return state.merge({
     success: true,
     searchResult: action.payload.data.search,
-    searchString: action.meta.searchString,
     error: null,
   })
 }
@@ -106,9 +99,9 @@ ACTION_HANDLERS[CLEAR_SEARCH] = (state) => {
   return state.merge({
     searchResult: {
       users: [],
-      properties: []
+      properties: [],
+      searchStrings: []
     },
-    searchString: '',
   })
 }
 
@@ -119,9 +112,9 @@ const initialState = Immutable.fromJS({
   error: null,
   searchResult: {
     users: [],
-    properties: []
+    properties: [],
+    searchStrings: []
   },
-  searchString: '',
 })
 
 export default function appReducer(state = initialState, action) {

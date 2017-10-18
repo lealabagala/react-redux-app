@@ -13,6 +13,7 @@ const Sequelize = require('sequelize')
 
 const Op = Sequelize.Op
 const Promise = require('bluebird')
+const _ = require('lodash')
 
 // User Object Type
 const UserType = new GraphQLObjectType({
@@ -64,6 +65,12 @@ const QueryType = new GraphQLObjectType({
       resolve(queryObject) {
         return queryObject.properties
       }
+    },
+    searchStrings: {
+      type: new GraphQLList(GraphQLString),
+      resolve(queryObject) {
+        return queryObject.searchStrings
+      }
     }
   })
 })
@@ -78,53 +85,76 @@ const MainQuery = new GraphQLObjectType({
         searchString: { type: GraphQLString }
       },
       resolve(root, args) {
-        // Fetch users by search string
-        let usersPromise = Db.models.user.findAll({ 
-          where: {
-            [Op.or]: [
-              {
-                firstName: {
-                  [Op.iLike]: `%${args.searchString}%`
-                }
-              },
-              {
-                lastName: {
-                  [Op.iLike]: `%${args.searchString}%`
-                }
+        let { searchString } = args
+        let searchStrings = searchString.split(' ')  // split search string by space character
+        
+        let oneString = false
+        if (searchString.length !== 0 
+            && searchString.charAt(0) === `"` 
+            && searchString.charAt(searchString.length-1) === `"`) { // determine if string is closed by quotation marks
+          searchStrings = [ searchString.slice(1, searchString.length-1) ]
+          oneString = true
+        }
+        
+        let userFields = ['firstName', 'lastName']        // search user's first and last name
+        let propertyFields = ['street', 'city', 'state']  // search properties' street, city, and state
+        let userConditions = []
+        let propertyConditions = []
+
+        // set conditions for searching string
+        _.times(searchStrings.length, (i) => {
+          _.times(userFields.length, (j) => {
+            userConditions.push({
+              [userFields[j]]: {
+                [Op.iLike]: `%${searchStrings[i]}%`
               }
-            ]
-          } 
+            })
+          })
+          _.times(propertyFields.length, (j) => {
+            propertyConditions.push({
+              [propertyFields[j]]: {
+                [Op.iLike]: `%${searchStrings[i]}%`
+              }
+            })
+          })
         })
 
-        // Fetch properties by search string
-        let propsPromise = Db.models.property.findAll({ 
+        let userCriteria = !oneString ?
+        { 
           where: {
-            [Op.or]: [
-              {
-                street: {
-                  [Op.iLike]: `%${args.searchString}%`
-                }
-              },
-              {
-                city: {
-                  [Op.iLike]: `%${args.searchString}%`
-                }
-              },
-              {
-                state: {
-                  [Op.iLike]: `%${args.searchString}%`
-                }
-              },
-            ]
+            [Op.or]: userConditions
           } 
-        })
+        } :
+        {
+          where: Db.where(Db.fn('concat', Db.col('firstName'), Db.col('lastName')), {
+            [Op.iLike]: `%${searchStrings[0].split(' ').join('%')}%`
+          })
+        }
+
+        let propCriteria = !oneString ?
+        { 
+          where: {
+            [Op.or]: propertyConditions
+          } 
+        } :
+        {
+          where: Db.where(Db.fn('concat', Db.col('street'), Db.col('city'), Db.col('state')), {
+            [Op.iLike]: `%${searchStrings[0].split(' ').join('%')}%`
+          })
+        }
+      
+        // Fetch users by search string
+        let usersPromise = Db.models.user.findAll(userCriteria)
+
+        // Fetch properties by search string
+        let propsPromise = Db.models.property.findAll(propCriteria)
           
         // Return users and properties in one object
         return Promise.join(
           usersPromise,
           propsPromise,
           (users, properties) => {
-            return { users, properties }
+            return { users, properties, searchStrings }
           }
         ) 
       }
