@@ -15,6 +15,14 @@ const searchObject = {
   properties: [],
 }
 
+const initialValues = {
+  error: null,
+  searchResult: searchObject,
+  preSearchResult: searchObject,
+  searchString: '',
+  preSearchString: ''
+}
+
 // ------------------------------------
 // Actions
 // ------------------------------------
@@ -94,16 +102,14 @@ ACTION_HANDLERS[SEARCH] = state => {
 }
 
 ACTION_HANDLERS[SEARCH_SUCCESS] = (state, action) => {
-  let obj = action.meta.searchType === 'final' ? 'searchResult' : 'preSearchResult'
-  let params = {
+  let type = action.meta.searchType === 'final' ? 'searchResult' : 'preSearchResult'
+  let str = action.meta.searchType === 'final' ? 'searchString' : 'preSearchString'
+  return state.merge({
     success: true,
-    [obj]: action.payload.data.search,
+    [type]: action.payload.data.search,
+    [str]: action.meta.searchString,
     error: null,
-  }
-  if (action.meta.searchType === 'final') {
-    params.searchString = action.meta.searchString
-  }
-  return state.merge(params)
+  })
 }
 
 ACTION_HANDLERS[SEARCH_FAIL] = (state, action) => {
@@ -114,10 +120,7 @@ ACTION_HANDLERS[SEARCH_FAIL] = (state, action) => {
 }
 
 ACTION_HANDLERS[CLEAR_SEARCH] = (state) => {
-  return state.merge({
-    searchResult: searchObject,
-    searchString: ''
-  })
+  return state.merge(initialValues)
 }
 
 
@@ -125,12 +128,7 @@ ACTION_HANDLERS[CLEAR_SEARCH] = (state) => {
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = Immutable.fromJS({
-  error: null,
-  searchResult: searchObject,
-  preSearchResult: searchObject,
-  searchString: ''
-})
+const initialState = Immutable.fromJS(initialValues)
 
 export default function appReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

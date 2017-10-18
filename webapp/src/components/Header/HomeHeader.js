@@ -40,7 +40,7 @@ class HomeHeader extends React.Component {
   }
 
   render () {
-    let { search, clearSearch, preSearchResult } = this.props
+    let { search, clearSearch, preSearchResult, preSearchString } = this.props
     let { searchInput, showPreSearchResults } = this.state
     let { users, properties } = preSearchResult.toJSON()
 
@@ -66,7 +66,7 @@ class HomeHeader extends React.Component {
               onKeyPress={this.handleOnKeyPress}
               value={searchInput}
               className="form form-control" />
-            { searchStrings.length !== 0 && showPreSearchResults && searchStrings[0] !== "" &&
+            { showPreSearchResults && searchStrings.length !== 0 && preSearchString !== "" &&
               <Dropdown.Menu className="search-result">
                 { searchStrings.map((str) => (
                   <MenuItem onClick={() => this.handleSelect(str.value)}>{str.value}</MenuItem>
