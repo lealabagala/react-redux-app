@@ -1,5 +1,5 @@
 {
-  "name": "UserProperties",
+  "name": "Onerent",
   "version": "3.0.0-alpha.2",
   "description": "A Sample React-Redux App",
   "main": "index.js",
@@ -69,10 +69,6 @@
         "DEBUG": "app:*"
       }
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lealabagala/user-properties.git"
   },
   "author": "Lea Labagala",
   "license": "MIT",

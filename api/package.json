@@ -1,0 +1,23 @@
+{
+  "name": "user_properties",
+  "version": "1.0.0",
+  "description": "Simple GraphQL server",
+  "main": "server.js",
+  "scripts": {
+    "dev:server": "nodemon server.js",
+    "json:server": "json-server --watch data.json"
+  },
+  "author": "Lea Labagala",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "bluebird": "^3.5.1",
+    "express": "^4.15.3",
+    "express-graphql": "^0.6.7",
+    "graphql": "^0.10.5",
+    "json-server": "^0.11.2",
+    "nodemon": "^1.11.0",
+    "pg": "^7.3.0",
+    "sequelize": "^4.14.0"
+  }
+}

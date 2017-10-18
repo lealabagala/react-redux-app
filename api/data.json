@@ -1,0 +1,93 @@
+{
+  "users": [
+    {
+      "id": "10001",
+      "firstName": "John",
+      "lastName": "Doe",
+      "properties": [
+        {
+          "id": "20001",
+          "street": "123 Pine Street",
+          "city": "San Francisco",
+          "state": "California",
+          "zip": "5000",
+          "rent": 10000
+        },
+        {
+          "id": "20002",
+          "street": "234 Palm Street",
+          "city": "Las Vegas",
+          "state": "Nevada",
+          "zip": "6000",
+          "rent": 12000
+        }
+      ]
+    },
+    {
+      "id": "10002",
+      "firstName": "Keith",
+      "lastName": "Wilson",
+      "properties": [
+        {
+          "id": "20003",
+          "street": "456 Mahogany Street",
+          "city": "New York City",
+          "state": "New York",
+          "zip": "7000",
+          "rent": 20000
+        },
+        {
+          "id": "20004",
+          "street": "789 Avocado Street",
+          "city": "Oklahoma City",
+          "state": "Oklahoma",
+          "zip": "7000",
+          "rent": 15000
+        },
+        {
+          "id": "20005",
+          "street": "012 Apple Street",
+          "city": "Detroit",
+          "state": "Michigan",
+          "zip": "8000",
+          "rent": 13000
+        }
+      ]
+    },
+    {
+      "id": "10003",
+      "firstName": "Tom",
+      "lastName": "Pine",
+      "properties": []
+    },
+    {
+      "id": "10004",
+      "firstName": "Jen",
+      "lastName": "Thompson",
+      "properties": [
+        {
+          "id": "20006",
+          "street": "100 Sunflower Ave.",
+          "city": "Boston",
+          "state": "Massachusetts",
+          "zip": "4000",
+          "rent": 21000
+        },
+        {
+          "id": "20007",
+          "street": "323 Washington St.",
+          "city": "St. Louis",
+          "state": "Missouri",
+          "zip": "9000",
+          "rent": 18000
+        }
+      ]
+    },
+    {
+      "id": "10005",
+      "firstName": "Harry",
+      "lastName": "White",
+      "properties": []
+    }
+  ]
+}
