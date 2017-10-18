@@ -94,36 +94,31 @@ const MainQuery = new GraphQLObjectType({
         
         let userFields = ['firstName', 'lastName']        // search user's first and last name
         let propertyFields = ['street', 'city', 'state']  // search properties' street, city, and state
-        let userConditions = []
-        let propertyConditions = []
+        // let userConditions = []
+        // let propertyConditions = []
 
         // set conditions for searching string
-        _.times(searchStrings.length, (i) => {
-          let params = []
-          _.times(userFields.length, (j) => {
-            params.push({
-              [userFields[j]]: {
-                [Op.iLike]: `%${searchStrings[i]}%`
-              }
-            })
-          })
-          userConditions.push({
+        let userConditions = searchStrings.map(str => {
+          let params = userFields.map(field => ({
+            [field]: {
+              [Op.iLike]: `%${str}%`
+            }
+          }))
+          return {
             [Op.or]: params
-          })
-
-          params = []
-          _.times(propertyFields.length, (j) => {
-            params.push({
-              [propertyFields[j]]: {
-                [Op.iLike]: `%${searchStrings[i]}%`
-              }
-            })
-          })
-          propertyConditions.push({
-            [Op.or]: params
-          })
+          }
         })
-        
+
+        let propertyConditions = searchStrings.map(str => {
+          let params = propertyFields.map(field => ({
+            [field]: {
+              [Op.iLike]: `%${str}%`
+            }
+          }))
+          return {
+            [Op.or]: params
+          }
+        })
       
         // Fetch users by search string
         let usersPromise = Db.models.user.findAll({ 
