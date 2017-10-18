@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
     component - in this case, the counter:   */
 
 import Header from 'components/Header'
-import { search } from 'store/modules/app'
+import { search, clearSearch } from 'store/modules/app'
 
 /*  Object of action creators (can also be function that returns object).
     Keys will be passed as props to presentational components. Here we are
@@ -13,6 +13,7 @@ import { search } from 'store/modules/app'
 
 const mapDispatchToProps = {
   search, 
+  clearSearch,
 }
 
 const mapStateToProps = (state) => ({

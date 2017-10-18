@@ -4,27 +4,15 @@ import { CALL_API } from 'redux-api-middleware'
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const CONNECT = 'api/CONNECT'
-export const CONNECT_SUCCESS = 'api/CONNECT_SUCCESS'
-export const CONNECT_FAIL = 'api/CONNECT_FAIL'
-
 export const SEARCH = 'api/SEARCH'
 export const SEARCH_SUCCESS = 'api/SEARCH_SUCCESS'
 export const SEARCH_FAIL = 'api/SEARCH_FAIL'
 
+export const CLEAR_SEARCH = 'api/CLEAR_SEARCH'
+
 // ------------------------------------
 // Actions
 // ------------------------------------
-
-export function connectToAPI () {
-  return {
-    [CALL_API]: {
-      endpoint: '/api/',
-      method: 'GET',
-      types: [ CONNECT, CONNECT_SUCCESS, CONNECT_FAIL ],
-    },
-  }
-}
 
 export function search (searchString) {
   let searchQuery = `{
@@ -71,9 +59,15 @@ export function search (searchString) {
   }
 }
 
+export function clearSearch() {
+  return {
+    type: CLEAR_SEARCH
+  }
+}
+
 export const actions = {
-  connectToAPI,
   search,
+  clearSearch,
 }
 
 // ------------------------------------
@@ -84,30 +78,6 @@ const ACTION_HANDLERS = {}
 // ------------------------------------
 // Connect to API action handlers
 // ------------------------------------
-ACTION_HANDLERS[CONNECT] = state => {
-  return state.merge({
-    connecting: true,
-    success: false,
-    error: null,
-  })
-}
-
-ACTION_HANDLERS[CONNECT_SUCCESS] = (state, action) => {
-  return state.merge({
-    connecting: false,
-    success: true,
-    connection: action.payload,
-    error: null,
-  })
-}
-
-ACTION_HANDLERS[CONNECT_FAIL] = (state, action) => {
-  return state.merge({
-    connecting: false,
-    success: false,
-    error: action.payload.response.error,
-  })
-}
 
 ACTION_HANDLERS[SEARCH] = state => {
   return state.merge({
@@ -132,12 +102,21 @@ ACTION_HANDLERS[SEARCH_FAIL] = (state, action) => {
   })
 }
 
+ACTION_HANDLERS[CLEAR_SEARCH] = (state) => {
+  return state.merge({
+    searchResult: {
+      users: [],
+      properties: []
+    },
+    searchString: '',
+  })
+}
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = Immutable.fromJS({
   error: null,
-  connection: null,
   searchResult: {
     users: [],
     properties: []

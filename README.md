@@ -1,30 +1,49 @@
 # user-properties
 
-Node.js/Express CRUD backend using GraphQL and JSON-Server
+Simple React-Redux app with Node.js/Express CRUD backend using GraphQL, Sequelize, and Postgresql.
 
 ### Version
 1.0.0
 
-## Usage
+## API
 
--Install Dependencies
+Install packages
+
+```bash
+$ cd api
+```
 
 ```bash
 $ npm install
 ```
 
--Run JSON-Server (Port 3000)
+Create Database (make sure Postgresql is running in localhost:5432)
+* Note: The default database_name is `onerent`. You may configure the database in `api/db.js`
 
 ```bash
-$ npm run json:server
+$ createdb <database_name>
 ```
 
--Run Server (Port 4000)
+Run Server (Port 4000)
 
 ```bash
 $ npm run dev:server
 ```
 
--Visit Graphiql IDE
+## Webapp
 
-Go to http://localhost:4000/graphql
+Install packages
+
+```bash
+$ cd webapp
+```
+
+```bash
+$ npm install
+```
+
+Run App
+
+```bash
+$ npm run dev
+```

@@ -1,11 +1,16 @@
 import React from 'react'
 import classes from './Search.scss'
 import { Button } from 'react-bootstrap'
+import accounting from 'accounting'
 
 class Home extends React.Component {
 
   handleOnChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
+  }
+  
+  formatAmount = (amount, currency='$') => {
+    return accounting.formatMoney(amount, { symbol: currency, format: '%s %v' });
   }
 
   render () {
@@ -21,7 +26,7 @@ class Home extends React.Component {
           <div className="col-md-10">
             { searchString === '' ? 
               !showUsers && !showProperties ?
-                <div>
+                <div className="text-center margin-top-40">
                   <h4 className="home-title">Welcome, Guest!</h4>
                   <h6>This is a sample React-Redux app with a search function.</h6>
                 </div> : 
@@ -54,21 +59,21 @@ class Home extends React.Component {
                       <div className="row collapse" id={`user${i}`}>
                         <h5>Properties</h5>
                         <div className="row row-sub-labels">
-                          <div className="col-md-2"></div>
-                          <div className="col-md-2"><b>Street</b></div>
+                          <div className="col-md-1"></div>
+                          <div className="col-md-3"><b>Street</b></div>
                           <div className="col-md-2"><b>City</b></div>
                           <div className="col-md-2"><b>State</b></div>
-                          <div className="col-md-2"><b>Rent</b></div>
-                          <div className="col-md-2"></div>
+                          <div className="col-md-3"><b>Rent</b></div>
+                          <div className="col-md-1"></div>
                         </div>
                         { user.properties.map((property, i) => (
                           <div className={`row row-sub-results ${i === 0 && 'first'} ${i === properties.length-1 && 'last'}`}>
-                            <div className="col-md-2"></div>
-                            <div className="col-md-2">{ property.street }</div>
+                            <div className="col-md-1"></div>
+                            <div className="col-md-3">{ property.street }</div>
                             <div className="col-md-2">{ property.city }</div>
                             <div className="col-md-2">{ property.state }</div>
-                            <div className="col-md-2">{ property.rent }</div>
-                            <div className="col-md-2"></div>
+                            <div className="col-md-3">{ this.formatAmount(property.rent) }</div>
+                            <div className="col-md-1"></div>
                           </div>
                         )) }
                       </div>
@@ -94,7 +99,7 @@ class Home extends React.Component {
                     <div className="col-md-3">{ property.street }</div>
                     <div className="col-md-3">{ property.city }</div>
                     <div className="col-md-2">{ property.state }</div>
-                    <div className="col-md-2">{ property.rent }</div>
+                    <div className="col-md-2">{ this.formatAmount(property.rent) }</div>
                     <div className="col-md-2">{ property.user.firstName } { property.user.lastName }</div>
                   </div>
                 )) }

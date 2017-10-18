@@ -25,13 +25,13 @@ class HomeHeader extends React.Component {
   }
 
   render () {
-    let { search } = this.props
+    let { search, clearSearch } = this.props
     let { searchInput } = this.state
 
     return (
       <nav className="navbar navbar-fixed-top navbar-home">
         <div className="navbar-header">
-          <Link to="/" className="navbar-brand">
+          <Link className="navbar-brand" onClick={clearSearch}>
             Onerent
           </Link>
         </div>
