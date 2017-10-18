@@ -17,7 +17,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
-  
+  preSearchResult: state.app.get('preSearchResult'),
 })
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

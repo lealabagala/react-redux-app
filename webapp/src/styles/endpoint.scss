@@ -13,10 +13,13 @@
 
   .navbar-access {
     display: flex;
-    width: 30%;
-    .form-control, .btn-primary {
+    .input-grp, .btn-primary {
       margin: 10px 5px;
     }
+  }
+  .input-grp {
+    position: relative;
+    width: 300px;
   }
 }
 

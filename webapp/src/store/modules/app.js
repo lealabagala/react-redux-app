@@ -10,11 +10,17 @@ export const SEARCH_FAIL = 'api/SEARCH_FAIL'
 
 export const CLEAR_SEARCH = 'api/CLEAR_SEARCH'
 
+const searchObject = {
+  users: [],
+  properties: [],
+  searchStrings: []
+}
+
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export function search (searchString) {
+export function search (searchString, searchType='final') {
   let re = new RegExp(`"`, 'g')
 
   let searchQuery = `{
@@ -44,11 +50,21 @@ export function search (searchString) {
       searchStrings
     }
   }`
+
   return {
     [CALL_API]: {
       endpoint: `/api/graphql?query=${searchQuery}`,
       method: 'GET',
-      types: [ SEARCH, SEARCH_SUCCESS, SEARCH_FAIL ],
+      types: [ SEARCH, 
+        {
+          type: SEARCH_SUCCESS,
+          payload: (action, state, res) => res.json(),
+          meta: {
+            searchType,
+          },
+        }, 
+        SEARCH_FAIL 
+      ],
     },
   }
 }
@@ -81,9 +97,10 @@ ACTION_HANDLERS[SEARCH] = state => {
 }
 
 ACTION_HANDLERS[SEARCH_SUCCESS] = (state, action) => {
+  let obj = action.meta.searchType === 'final' ? 'searchResult' : 'preSearchResult'
   return state.merge({
     success: true,
-    searchResult: action.payload.data.search,
+    [obj]: action.payload.data.search,
     error: null,
   })
 }
@@ -97,24 +114,19 @@ ACTION_HANDLERS[SEARCH_FAIL] = (state, action) => {
 
 ACTION_HANDLERS[CLEAR_SEARCH] = (state) => {
   return state.merge({
-    searchResult: {
-      users: [],
-      properties: [],
-      searchStrings: []
-    },
+    searchResult: searchObject,
   })
 }
+
+
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 const initialState = Immutable.fromJS({
   error: null,
-  searchResult: {
-    users: [],
-    properties: [],
-    searchStrings: []
-  },
+  searchResult: searchObject,
+  preSearchResult: searchObject,
 })
 
 export default function appReducer(state = initialState, action) {
