@@ -1,4 +1,4 @@
-# user-properties
+# React-Redux App
 
 Simple React-Redux app with Node.js/Express CRUD backend using GraphQL, Sequelize, and Postgresql.
 
