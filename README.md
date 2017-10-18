@@ -7,6 +7,13 @@ Simple React-Redux app with Node.js/Express CRUD backend using GraphQL, Sequeliz
 
 ## API
 
+Create Database (make sure Postgresql is running in `localhost:5432`)
+* Note: The default database_name is `onerent`. You may configure the database in `api/db.js`
+
+```bash
+$ createdb <database_name>
+```
+
 Install packages
 
 ```bash
@@ -17,14 +24,7 @@ $ cd api
 $ npm install
 ```
 
-Create Database (make sure Postgresql is running in localhost:5432)
-* Note: The default database_name is `onerent`. You may configure the database in `api/db.js`
-
-```bash
-$ createdb <database_name>
-```
-
-Run Server (Port 4000)
+Run Server (Port `4000`)
 
 ```bash
 $ npm run dev:server
@@ -42,7 +42,9 @@ $ cd webapp
 $ npm install
 ```
 
-Run App
+Create `.env` file (use `.env.sample` as template)
+
+Run App (Port `3000`)
 
 ```bash
 $ npm run dev
